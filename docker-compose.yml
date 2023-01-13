@@ -1,0 +1,60 @@
+version: '3'
+services:
+  eureka-server:
+    build: D:\ClaimsApp\Claims API\server
+    image: eureka-server
+    ports: 
+    - "8761:8761"
+  claims:
+    build: D:\ClaimsApp\Claims API\claims 
+    image: claims
+    container_name: claims
+    ports:
+    - "8100:8100"
+    links:
+    - eureka-server
+    depends_on:
+     - mongodb
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+  facility: 
+    build: D:\ClaimsApp\Claims API\facility 
+    image: facility
+    container_name: facility
+    ports:
+    - "8200:8200"
+    links:
+    - eureka-server
+    depends_on:
+     - mongodb
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+  customer: 
+    build: D:\ClaimsApp\Claims API\customer 
+    image: customer
+    container_name: customer
+    ports:
+    - "8400:8400"
+    links:
+    - eureka-server
+    depends_on:
+     - mongodb
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+  api-gateway:
+    build: D:\ClaimsApp\Claims API\apigateway
+    image: apigateway
+    container_name: apigateway
+    depends_on:
+     - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    restart: always
+    ports:
+        - "8080:8080"
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    ports: 
+      - "27017:27017"
+    restart: unless-stopped
