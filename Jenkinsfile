@@ -17,7 +17,7 @@ node {
       }
       stage("SSH Into Server") {
        def remote = [:]
-       remote.name = 'VMububtu18.0'
+       remote.name = 'DEV-VM'
        remote.host = '20.62.171.46'
        remote.user = 'dev_azureuser'
        remote.password = 'AHTgxKmRGb05'
